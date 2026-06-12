@@ -42,10 +42,10 @@ Pastikan Anda sudah menginstal:
    * Jalankan Apache dan MySQL pada control panel XAMPP/Laragon.
    * Buka browser dan akses **phpMyAdmin** (`http://localhost/phpmyadmin`).
    * Buat database baru bernama `db_kargo_ekspedisi`.
-   * Pilih database tersebut, masuk ke tab **Import**, lalu pilih file `db_kargo_ekspedisi.sql` yang berada di direktori utama proyek ini.
+   * Pilih database tersebut, masuk ke tab **Import**, lalu pilih file `db_kargo_ekspedisi.sql` yang berada di dalam folder `database` pada proyek ini.
    * Klik **Import** / **Go** dan tunggu hingga seluruh skema tabel berhasil diimpor.
 3. **Konfigurasi Koneksi**
-   * File konfigurasi database berada di [database.php](file:///c:/Users/ADVAN/Documents/GitHub/PHP_PBO_Project_kelompok_kargo/kargo-lengkap-test/config/database.php).
+   * File konfigurasi database berada di [database.php](file:///c:/Users/ADVAN/Documents/GitHub/PHP_PBO_Project_kelompok_kargo/kargo-lengkap-fiks/config/database.php).
    * Pastikan konfigurasi host, nama database, username, dan password telah sesuai dengan pengaturan server Anda:
      ```php
      private $host = "localhost";
@@ -58,7 +58,7 @@ Pastikan Anda sudah menginstal:
 * Buka browser Anda.
 * Akses URL dasbor aplikasi pengujian di:
   ```
-  http://localhost/PHP_PBO_Project_kelompok_kargo/kargo-lengkap-test/index.php
+  http://localhost/PHP_PBO_Project_kelompok_kargo/kargo-lengkap-fiks/index.php
   ```
 * Halaman dasbor interaktif akan menampilkan data transaksi kargo dari database lengkap dengan visualisasi statistika kargo dan total pendapatan yang dikalkulasi secara polimorfik secara real-time.
 
@@ -73,7 +73,9 @@ PHP_PBO_Project_kelompok_kargo/
 │   ├── kargoreguler.php
 │   ├── kargobahankimia.php
 │   └── kargopecahbelah.php
-├── kargo-lengkap-test/             # Modul Aplikasi Lengkap Terintegrasi
+├── database/                       # Skema Database
+│   └── db_kargo_ekspedisi.sql      # Ekspor Skema Database MySQL Relasional
+├── kargo-lengkap-fiks/             # Modul Aplikasi Lengkap Terintegrasi
 │   ├── classes/                    # Struktur Kelas Model OOP & Controller
 │   │   ├── Kargo.php               # Master Abstract Class (Induk)
 │   │   ├── KargoReguler.php        # Subclass Kargo Reguler
@@ -83,8 +85,7 @@ PHP_PBO_Project_kelompok_kargo/
 │   ├── config/
 │   │   └── database.php            # Kelas Koneksi Database dengan OOP Constructor
 │   └── index.php                   # Tampilan User Interface (Dasbor Statistik)
-├── db_kargo_ekspedisi.sql          # Ekspor Skema Database MySQL Relasional
-├── UML.png                         # File Class Diagram UML Resmi Proyek
+├── UML.jpeg                        # File Class Diagram UML Resmi Proyek
 └── README.md                       # Manifes Dokumentasi Proyek (File ini)
 ```
 
@@ -94,7 +95,7 @@ PHP_PBO_Project_kelompok_kargo/
 
 Berikut adalah pemetaan visual dari arsitektur kelas pada sistem **LogiCargo** yang memodelkan relasi generalisasi (pewarisan), tipe data properti, tingkat akses data (access modifier), dan metode yang disediakan:
 
-![Class Diagram UML](UML.png)
+![Class Diagram UML](UML.jpeg)
 
 ### Keterangan Hubungan Antar Kelas:
 * **Generalisasi (Inheritance / Pewarisan)**: Ditunjukkan dengan garis panah berujung segitiga kosong dari `KargoReguler`, `KargoBahanKimia`, dan `KargoPecahBelah` ke Master Abstract Class `Kargo`.
@@ -107,10 +108,10 @@ Berikut adalah pemetaan visual dari arsitektur kelas pada sistem **LogiCargo** y
 Berikut adalah penjelasan teknis detail dari implementasi pilar-pilar pemrograman berorientasi objek dalam kode aplikasi:
 
 ### 1. Abstraction (Abstraksi)
-Abstraksi digunakan untuk menyembunyikan detail implementasi dan mendefinisikan kontrak fungsionalitas bagi kelas-kelas anak. Kelas [Kargo.php](file:///c:/Users/ADVAN/Documents/GitHub/PHP_PBO_Project_kelompok_kargo/kargo-lengkap-test/classes/Kargo.php) dideklarasikan sebagai **abstract class** dan memiliki **abstract methods** yang wajib ditimpa (override) oleh setiap subclass.
+Abstraksi digunakan untuk menyembunyikan detail implementasi dan mendefinisikan kontrak fungsionalitas bagi kelas-kelas anak. Kelas [Kargo.php](file:///c:/Users/ADVAN/Documents/GitHub/PHP_PBO_Project_kelompok_kargo/kargo-lengkap-fiks/classes/Kargo.php) dideklarasikan sebagai **abstract class** dan memiliki **abstract methods** yang wajib ditimpa (override) oleh setiap subclass.
 
 ```php
-// Terletak di kargo-lengkap-test/classes/Kargo.php
+// Terletak di kargo-lengkap-fiks/classes/Kargo.php
 abstract class Kargo {
     // Encapsulation: protected attributes
     protected $id_resi;
@@ -129,7 +130,7 @@ abstract class Kargo {
 Enkapsulasi diterapkan dengan membatasi akses langsung ke data sensitif dengan menggunakan access modifier `protected` pada properti kelas induk dan `private` pada properti spesifik kelas anak. Akses data kemudian dilakukan melalui **getter methods** yang aman.
 
 ```php
-// Terletak di kargo-lengkap-test/classes/Kargo.php
+// Terletak di kargo-lengkap-fiks/classes/Kargo.php
 abstract class Kargo {
     protected $id_resi;
     protected $pengirim;
@@ -150,7 +151,7 @@ abstract class Kargo {
 Pewarisan diimplementasikan melalui kata kunci `extends`, di mana kelas anak mewarisi seluruh properti dan metode non-private dari kelas induk `Kargo`. Kelas anak juga menggunakan `parent::__construct` untuk menginisialisasi properti induk secara otomatis.
 
 ```php
-// Terletak di kargo-lengkap-test/classes/KargoBahanKimia.php
+// Terletak di kargo-lengkap-fiks/classes/KargoBahanKimia.php
 class KargoBahanKimia extends Kargo {
     private $tingkat_bahaya;  // Class 1-9
     private $jenis_sertifikasi_sandi;
@@ -177,10 +178,10 @@ Polimorfisme diimplementasikan dengan melakukan **Method Overriding** pada metod
 * **Kargo Pecah Belah**: Berat dikali tarif dasar ditambah biaya asuransi wajib serta surcharge penanganan ekstra fragile (5% dari tarif berat dasar).
   $$\text{Tarif} = (\text{berat} \times \text{tarif dasar}) + \text{asuransi} + (0.05 \times \text{tarif berat})$$
 
-**Dynamic Binding (Runtime Polymorphism)** dieksekusi di controller [ManajemenKargo.php](file:///c:/Users/ADVAN/Documents/GitHub/PHP_PBO_Project_kelompok_kargo/kargo-lengkap-test/classes/ManajemenKargo.php) melalui koleksi polimorfik bertipe kelas induk:
+**Dynamic Binding (Runtime Polymorphism)** dieksekusi di controller [ManajemenKargo.php](file:///c:/Users/ADVAN/Documents/GitHub/PHP_PBO_Project_kelompok_kargo/kargo-lengkap-fiks/classes/ManajemenKargo.php) melalui koleksi polimorfik bertipe kelas induk:
 
 ```php
-// Terletak di kargo-lengkap-test/classes/ManajemenKargo.php
+// Terletak di kargo-lengkap-fiks/classes/ManajemenKargo.php
 class ManajemenKargo {
     // Koleksi bertipe objek Kargo (bisa berisi KargoReguler, KargoBahanKimia, atau KargoPecahBelah)
     private $polymorphic_collection = [];
@@ -214,19 +215,19 @@ Proyek ini diselesaikan secara kolaboratif oleh 5 anggota tim dengan pembagian p
 
 * **Job 1: Almas (Username GitHub: `almassalsabila`)**
   * **Peran**: Database Engineer & Data Access Layer (DAL) Specialist
-  * **Tanggung Jawab**: Merancang skema basis data MySQL relasional, menyusun berkas ekspor [db_kargo_ekspedisi.sql](file:///c:/Users/ADVAN/Documents/GitHub/PHP_PBO_Project_kelompok_kargo/db_kargo_ekspedisi.sql), serta menulis kelas koneksi database [database.php](file:///c:/Users/ADVAN/Documents/GitHub/PHP_PBO_Project_kelompok_kargo/kargo-lengkap-test/config/database.php) dengan otomatisasi koneksi PDO berbasis konstruktor.
+  * **Tanggung Jawab**: Merancang skema basis data MySQL relasional, menyusun berkas ekspor [db_kargo_ekspedisi.sql](file:///c:/Users/ADVAN/Documents/GitHub/PHP_PBO_Project_kelompok_kargo/database/db_kargo_ekspedisi.sql), serta menulis kelas koneksi database [database.php](file:///c:/Users/ADVAN/Documents/GitHub/PHP_PBO_Project_kelompok_kargo/kargo-lengkap-fiks/config/database.php) dengan otomatisasi koneksi PDO berbasis konstruktor.
 * **Job 2: Danang (Username GitHub: `Frinzg`)**
   * **Peran**: Software Architect & Core Abstraction
-  * **Tanggung Jawab**: Merancang struktur folder dasar repositori proyek, menyusun fondasi Master Abstract Class [Kargo.php](file:///c:/Users/ADVAN/Documents/GitHub/PHP_PBO_Project_kelompok_kargo/kargo-lengkap-test/classes/Kargo.php), dan menerapkan pembatasan visibilitas enkapsulasi (`protected` & `private`).
+  * **Tanggung Jawab**: Merancang struktur folder dasar repositori proyek, menyusun fondasi Master Abstract Class [Kargo.php](file:///c:/Users/ADVAN/Documents/GitHub/PHP_PBO_Project_kelompok_kargo/kargo-lengkap-fiks/classes/Kargo.php), dan menerapkan pembatasan visibilitas enkapsulasi (`protected` & `private`).
 * **Job 3: Rizqi (Username GitHub: `rizqibogorcihuyyy01`)**
   * **Peran**: Subclass Developer & Business Logic Specialist
-  * **Tanggung Jawab**: Membangun seluruh variasi kelas anak konkrit ([KargoReguler.php](file:///c:/Users/ADVAN/Documents/GitHub/PHP_PBO_Project_kelompok_kargo/kargo-lengkap-test/classes/KargoReguler.php), [KargoBahanKimia.php](file:///c:/Users/ADVAN/Documents/GitHub/PHP_PBO_Project_kelompok_kargo/kargo-lengkap-test/classes/KargoBahanKimia.php), [KargoPecahBelah.php](file:///c:/Users/ADVAN/Documents/GitHub/PHP_PBO_Project_kelompok_kargo/kargo-lengkap-test/classes/KargoPecahBelah.php)) beserta atribut unik dan logika rumus kalkulasi tarif masing-masing kategori.
+  * **Tanggung Jawab**: Membangun seluruh variasi kelas anak konkrit ([KargoReguler.php](file:///c:/Users/ADVAN/Documents/GitHub/PHP_PBO_Project_kelompok_kargo/kargo-lengkap-fiks/classes/KargoReguler.php), [KargoBahanKimia.php](file:///c:/Users/ADVAN/Documents/GitHub/PHP_PBO_Project_kelompok_kargo/kargo-lengkap-fiks/classes/KargoBahanKimia.php), [KargoPecahBelah.php](file:///c:/Users/ADVAN/Documents/GitHub/PHP_PBO_Project_kelompok_kargo/kargo-lengkap-fiks/classes/KargoPecahBelah.php)) beserta atribut unik dan logika rumus kalkulasi tarif masing-masing kategori.
 * **Job 4: Hazel (Username GitHub: `comradehazel`)**
   * **Peran**: Controller & Polymorphic Driver Specialist
-  * **Tanggung Jawab**: Membuat kelas pengontrol utama [ManajemenKargo.php](file:///c:/Users/ADVAN/Documents/GitHub/PHP_PBO_Project_kelompok_kargo/kargo-lengkap-test/classes/ManajemenKargo.php) untuk menghubungkan antarmuka UI [index.php](file:///c:/Users/ADVAN/Documents/GitHub/PHP_PBO_Project_kelompok_kargo/kargo-lengkap-test/index.php) dengan database menggunakan koleksi objek polimorfik dan memicu *Dynamic Binding*.
+  * **Tanggung Jawab**: Membuat kelas pengontrol utama [ManajemenKargo.php](file:///c:/Users/ADVAN/Documents/GitHub/PHP_PBO_Project_kelompok_kargo/kargo-lengkap-fiks/classes/ManajemenKargo.php) untuk menghubungkan antarmuka UI [index.php](file:///c:/Users/ADVAN/Documents/GitHub/PHP_PBO_Project_kelompok_kargo/kargo-lengkap-fiks/index.php) dengan database menggunakan koleksi objek polimorfik dan memicu *Dynamic Binding*.
 * **Job 5: Sofyan (Username GitHub: `Sofyan Apriadhi N`)**
   * **Peran**: UML Designer & System Modeler
-  * **Tanggung Jawab**: Merancang dan memetakan struktur arsitektur sistem ke dalam Class Diagram UML resmi ([UML.png](file:///c:/Users/ADVAN/Documents/GitHub/PHP_PBO_Project_kelompok_kargo/UML.png)) yang secara visual memperlihatkan relasi asosiasi, generalisasi, dan komposisi serta melampirkannya ke aset repositori.
+  * **Tanggung Jawab**: Merancang dan memetakan struktur arsitektur sistem ke dalam Class Diagram UML resmi ([UML.jpeg](file:///c:/Users/ADVAN/Documents/GitHub/PHP_PBO_Project_kelompok_kargo/UML.jpeg)) yang secara visual memperlihatkan relasi asosiasi, generalisasi, dan komposisi serta melampirkannya ke aset repositori.
 * **Job 6: Rizqi (Username GitHub: `rizqibogorcihuyyy01`)**
   * **Peran**: Technical Writer & Documentation Specialist (README Dev)
   * **Tanggung Jawab**: Menyusun dokumen manifes repositori (`README.md`), menulis dokumentasi teknis instalasi dan OOP, serta memvalidasi keselarasan riwayat kerja logbook mingguan berdasarkan grafik kontribusi commit GitHub asli dari seluruh anggota.
